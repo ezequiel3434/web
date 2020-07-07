@@ -29,12 +29,12 @@ class ViewController: UIViewController {
     @IBAction func search(_ sender: Any) {
         
         if textField.text!.isEmpty {
-            
+            return
         }else{
             palabra = textField.text!
         }
         
-        let urlCompleto = "https://es.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=\(palabra!)"
+        let urlCompleto = "https://es.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=\(palabra!.replacingOccurrences(of:" ", with: "%20"))"
         
         let objetoURL = URL(string: urlCompleto)
         
@@ -56,9 +56,37 @@ class ViewController: UIViewController {
                     let extractSubJson = numSubJson["extract"] as! String
                     
                     
-                    DispatchQueue.main.sync(execute: {
-                        self.webView.loadHTMLString(extractSubJson, baseURL: nil)
-                    })
+                        if extractSubJson == "" {
+
+                                       
+
+                                       DispatchQueue.main.sync(execute:
+
+                                           {
+
+                                               self.webView.loadHTMLString("EL TEXTO ESTA MAL ESCRITO", baseURL: nil)
+
+                                               
+
+                                       })
+
+                                   } else{
+
+                                       
+
+                                       DispatchQueue.main.sync(execute:
+
+                                       {
+
+                                           self.webView.loadHTMLString(extractSubJson, baseURL: nil)
+
+                                       }) // todo lo que esta dentro del Parentecis es como precentamos el resultado de lo que pedimos
+
+                                       
+
+                                       print("ENTRAMOS EN ELSE ")
+
+                                   }
                     
                    
                     

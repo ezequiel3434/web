@@ -43,8 +43,27 @@ class ViewController: UIViewController {
                 print(error!)
             } else {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
-                    print(json)
+                    let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as! [String:Any]
+                    
+                    let querySubJson = json["query"] as! [String:Any]
+                    
+                    let pagesSubJson = querySubJson["pages"] as! [String:Any]
+                    
+                    let pageId = pagesSubJson.keys
+                    let firstKey = pageId.first!
+                    let numSubJson = pagesSubJson[firstKey] as! [String:Any]
+                    
+                    let extractSubJson = numSubJson["extract"] as! String
+                    
+                    
+                    DispatchQueue.main.sync(execute: {
+                        self.webView.loadHTMLString(extractSubJson, baseURL: nil)
+                    })
+                    
+                   
+                    
+                    
+                    
                 } catch  {
                     print("El procesamiento del JSON tuvo un error")
                 }

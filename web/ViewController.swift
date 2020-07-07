@@ -15,27 +15,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var textField: UITextField!
     var palabra: String?
     
+    /*
+     https://es.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=sega
+     */
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = URL(string: "https://www.youtube.com")
-        
-        let peticion = URLRequest(url: url!)
-        let tarea = URLSession.shared.dataTask(with: peticion) { (data, response, error) in
-            
-            if error == nil {
-                let datosString = NSString(data: data!, encoding: String.Encoding.utf8.rawValue)
-                
-                
-                DispatchQueue.main.sync(execute: {
-                    print(datosString!)
-                })
-            } else {
-                print(error!)
-            }
-        }
-        
-        tarea.resume()
         
     }
     
@@ -46,6 +33,25 @@ class ViewController: UIViewController {
         }else{
             palabra = textField.text!
         }
+        
+        let urlCompleto = "https://es.wikipedia.org/w/api.php?action=query&prop=extracts&format=json&exintro=&titles=\(palabra!)"
+        
+        let objetoURL = URL(string: urlCompleto)
+        
+        let task = URLSession.shared.dataTask(with: objetoURL!, completionHandler: { (data, res, error) in
+            if error != nil {
+                print(error!)
+            } else {
+                do {
+                    let json = try JSONSerialization.jsonObject(with: data!, options: JSONSerialization.ReadingOptions.mutableContainers) as AnyObject
+                    print(json)
+                } catch  {
+                    print("El procesamiento del JSON tuvo un error")
+                }
+            }
+        })
+        
+        task.resume()
         
         
     }

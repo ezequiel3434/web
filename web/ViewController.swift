@@ -53,7 +53,7 @@ class ViewController: UIViewController {
                     let firstKey = pageId.first!
                     let numSubJson = pagesSubJson[firstKey] as! [String:Any]
                     
-                    let extractSubJson = numSubJson["extract"] as! String
+                    let extractSubJson = numSubJson["extract"] as? String ?? ""
                     
                     
                         if extractSubJson == "" {
@@ -78,7 +78,8 @@ class ViewController: UIViewController {
 
                                        {
 
-                                           self.webView.loadHTMLString(extractSubJson, baseURL: nil)
+                                        self.webView.loadHTMLString(extractSubJson, baseURL: nil)
+                                     
 
                                        }) // todo lo que esta dentro del Parentecis es como precentamos el resultado de lo que pedimos
 
